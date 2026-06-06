@@ -1,0 +1,505 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>فاتورة تصميم ومستلزمات بناء</title>
+  <style>
+    :root{
+      --main:#0f766e;
+      --dark:#0f172a;
+      --light:#f4f7f8;
+      --muted:#64748b;
+      --border:#dbe3e7;
+      --card:#ffffff;
+      --danger:#dc2626;
+      --gold:#f59e0b;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:system-ui,-apple-system,"Segoe UI",Tahoma,Arial,sans-serif;
+      background:var(--light);
+      color:var(--dark);
+      padding:16px;
+    }
+    .app{max-width:1050px;margin:auto}
+    .toolbar{
+      background:#fff;
+      border:1px solid var(--border);
+      border-radius:18px;
+      padding:14px;
+      margin-bottom:16px;
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      justify-content:space-between;
+      align-items:center;
+      box-shadow:0 8px 22px rgba(15,23,42,.08);
+    }
+    .toolbar h1{margin:0;font-size:22px;color:var(--main)}
+    .btns{display:flex;gap:8px;flex-wrap:wrap}
+    button{
+      border:0;
+      border-radius:12px;
+      padding:11px 14px;
+      font-weight:800;
+      cursor:pointer;
+      color:#fff;
+      background:var(--main);
+      font-size:14px;
+    }
+    button.secondary{background:#0f172a}
+    button.gold{background:var(--gold)}
+    button.danger{background:var(--danger)}
+    button.light{background:#e2e8f0;color:#0f172a}
+    .invoice{
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius:24px;
+      padding:26px;
+      box-shadow:0 12px 35px rgba(15,23,42,.10);
+    }
+    .head{
+      display:flex;
+      justify-content:space-between;
+      gap:18px;
+      border-bottom:3px solid var(--main);
+      padding-bottom:18px;
+      margin-bottom:20px;
+      flex-wrap:wrap;
+    }
+    .brand h2{margin:0;font-size:30px;color:var(--main)}
+    .brand p,.meta p{margin:6px 0;color:var(--muted);line-height:1.6}
+    .invoice-title{text-align:left;min-width:260px}
+    .invoice-title h3{margin:0;font-size:34px;color:#0f172a}
+    .meta{
+      margin-top:10px;
+      background:#f8fafc;
+      border:1px solid var(--border);
+      border-radius:16px;
+      padding:12px;
+    }
+    .grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:14px;
+      margin:18px 0;
+    }
+    .box{
+      border:1px solid var(--border);
+      border-radius:18px;
+      padding:14px;
+      background:#fcfdff;
+    }
+    .box h4{margin:0 0 10px;color:var(--main);font-size:16px}
+    label{
+      display:block;
+      font-size:13px;
+      font-weight:800;
+      color:#334155;
+      margin-bottom:4px;
+    }
+    input,textarea,select{
+      width:100%;
+      border:1px solid var(--border);
+      border-radius:12px;
+      padding:10px;
+      font-size:15px;
+      outline:none;
+      margin-bottom:10px;
+      background:white;
+    }
+    textarea{min-height:70px;resize:vertical}
+    .quick{
+      border:1px solid var(--border);
+      border-radius:18px;
+      padding:14px;
+      background:#f8fafc;
+      margin:10px 0 16px;
+    }
+    .quick h4{margin:0 0 10px;color:#0f172a}
+    .chips{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+    }
+    .chip{
+      background:#ecfeff;
+      color:#0f766e;
+      border:1px solid #99f6e4;
+      padding:9px 12px;
+      border-radius:999px;
+      font-weight:900;
+      cursor:pointer;
+      font-size:13px;
+    }
+    table{
+      width:100%;
+      border-collapse:collapse;
+      margin-top:16px;
+      overflow:hidden;
+      border-radius:16px;
+    }
+    th{
+      background:var(--main);
+      color:#fff;
+      padding:12px;
+      text-align:right;
+      font-size:14px;
+    }
+    td{
+      border-bottom:1px solid var(--border);
+      padding:8px;
+      vertical-align:top;
+    }
+    td input, td select{margin:0}
+    .amount{text-align:left;font-weight:900;white-space:nowrap}
+    .deleteRow{
+      background:#fee2e2;
+      color:#991b1b;
+      padding:9px 10px;
+      border-radius:10px;
+      font-size:13px;
+    }
+    .totals{
+      margin-top:18px;
+      display:flex;
+      justify-content:flex-end;
+    }
+    .totalBox{
+      width:360px;
+      border:1px solid var(--border);
+      border-radius:18px;
+      overflow:hidden;
+      background:#fff;
+    }
+    .row{
+      display:flex;
+      justify-content:space-between;
+      padding:12px 14px;
+      border-bottom:1px solid var(--border);
+      gap:12px;
+      align-items:center;
+    }
+    .row.final{
+      background:#ecfeff;
+      color:var(--main);
+      font-size:21px;
+      font-weight:900;
+      border-bottom:0;
+    }
+    .notes{
+      margin-top:18px;
+      border:1px dashed var(--border);
+      border-radius:18px;
+      padding:14px;
+      color:#475569;
+      line-height:1.8;
+    }
+    .signature{
+      margin-top:28px;
+      display:flex;
+      justify-content:space-between;
+      gap:18px;
+      flex-wrap:wrap;
+    }
+    .signBox{
+      width:260px;
+      text-align:center;
+      padding-top:35px;
+      border-top:1px solid #94a3b8;
+      color:#475569;
+      font-weight:800;
+    }
+    @media(max-width:780px){
+      .grid{grid-template-columns:1fr}
+      .invoice{padding:16px}
+      .invoice-title{text-align:right}
+      .invoice-title h3{font-size:28px}
+      .totalBox{width:100%}
+      table{font-size:13px}
+      th,td{padding:7px}
+    }
+    @media print{
+      body{background:#fff;padding:0}
+      .toolbar,.quick,.no-print{display:none!important}
+      .app{max-width:100%;margin:0}
+      .invoice{box-shadow:none;border:0;border-radius:0}
+      input,textarea,select{
+        border:0;
+        padding:0;
+        background:transparent;
+        font:inherit;
+        color:inherit;
+        appearance:none;
+      }
+      textarea{height:auto}
+      .deleteCol{display:none}
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <div class="toolbar no-print">
+      <h1>فاتورة تصميم ومستلزمات بناء</h1>
+      <div class="btns">
+        <button onclick="addRow()">إضافة سطر</button>
+        <button class="gold" onclick="addMaterial()">إضافة مستلزم بناء</button>
+        <button class="secondary" onclick="sendWhatsApp()">إرسال واتساب</button>
+        <button class="light" onclick="window.print()">طباعة / PDF</button>
+        <button class="danger" onclick="resetInvoice()">مسح</button>
+      </div>
+    </div>
+
+    <section class="invoice">
+      <div class="head">
+        <div class="brand">
+          <h2><input id="companyName" value="مكتب المهندس للتصاميم ومستلزمات البناء" oninput="save()" /></h2>
+          <p><input id="companyDesc" value="تصاميم هندسية • خرائط • واجهات • مستلزمات بناء" oninput="save()" /></p>
+          <p>الهاتف / واتساب: <input id="companyPhone" value="22200000000" oninput="save()" /></p>
+        </div>
+
+        <div class="invoice-title">
+          <h3>فاتورة</h3>
+          <div class="meta">
+            <p>رقم الفاتورة: <input id="invoiceNo" value="INV-001" oninput="save()" /></p>
+            <p>التاريخ: <input id="invoiceDate" type="date" oninput="save()" /></p>
+            <p>نوع الفاتورة:
+              <select id="invoiceType" oninput="save()">
+                <option>تصميم هندسي</option>
+                <option>مستلزمات بناء</option>
+                <option>تصميم + مستلزمات بناء</option>
+              </select>
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid">
+        <div class="box">
+          <h4>بيانات الزبون</h4>
+          <label>اسم الزبون</label>
+          <input id="customerName" placeholder="مثال: محمد أحمد" oninput="save()" />
+          <label>رقم الهاتف / واتساب</label>
+          <input id="customerPhone" placeholder="مثال: 22200000000" oninput="save()" />
+          <label>العنوان / موقع المشروع</label>
+          <input id="customerAddress" placeholder="مثال: نواكشوط - تفرغ زينة" oninput="save()" />
+        </div>
+
+        <div class="box">
+          <h4>تفاصيل المشروع</h4>
+          <label>نوع المشروع</label>
+          <input id="projectType" placeholder="مثال: بناء منزل / محل / فيلا / ترميم" oninput="save()" />
+          <label>مدة التنفيذ أو التسليم</label>
+          <input id="duration" placeholder="مثال: 7 أيام / حسب التوفر" oninput="save()" />
+          <label>طريقة الدفع</label>
+          <input id="paymentMethod" placeholder="مثال: نقداً / تحويل / دفعة أولى" oninput="save()" />
+        </div>
+      </div>
+
+      <div class="quick no-print">
+        <h4>إضافة سريعة لمستلزمات البناء</h4>
+        <div class="chips">
+          <span class="chip" onclick="addPreset('إسمنت', 'كيس', 1, 0)">إسمنت</span>
+          <span class="chip" onclick="addPreset('حديد بناء', 'طن', 1, 0)">حديد</span>
+          <span class="chip" onclick="addPreset('رمل', 'متر مكعب', 1, 0)">رمل</span>
+          <span class="chip" onclick="addPreset('حصى', 'متر مكعب', 1, 0)">حصى</span>
+          <span class="chip" onclick="addPreset('طوب / بلوك', 'حبة', 100, 0)">طوب / بلوك</span>
+          <span class="chip" onclick="addPreset('دهان', 'علبة', 1, 0)">دهان</span>
+          <span class="chip" onclick="addPreset('أنابيب سباكة', 'قطعة', 1, 0)">سباكة</span>
+          <span class="chip" onclick="addPreset('أسلاك كهرباء', 'لفة', 1, 0)">كهرباء</span>
+          <span class="chip" onclick="addPreset('باب / نافذة', 'قطعة', 1, 0)">باب / نافذة</span>
+        </div>
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th style="width:34%">الخدمة / المادة</th>
+            <th style="width:16%">النوع</th>
+            <th style="width:13%">الوحدة</th>
+            <th style="width:12%">الكمية</th>
+            <th style="width:15%">السعر</th>
+            <th style="width:15%">المجموع</th>
+            <th class="deleteCol no-print" style="width:5%">حذف</th>
+          </tr>
+        </thead>
+        <tbody id="items"></tbody>
+      </table>
+
+      <div class="totals">
+        <div class="totalBox">
+          <div class="row">
+            <span>المجموع الفرعي</span>
+            <strong><span id="subtotal">0</span> MRU</strong>
+          </div>
+          <div class="row">
+            <span>الخصم</span>
+            <input id="discount" type="number" value="0" oninput="calc();save()" style="width:120px;text-align:left" />
+          </div>
+          <div class="row">
+            <span>المدفوع</span>
+            <input id="paid" type="number" value="0" oninput="calc();save()" style="width:120px;text-align:left" />
+          </div>
+          <div class="row final">
+            <span>الباقي</span>
+            <span><span id="remaining">0</span> MRU</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="notes">
+        <strong>ملاحظات:</strong>
+        <textarea id="notes" oninput="save()">هذه الفاتورة خاصة بخدمات التصميم ومستلزمات البناء. الأسعار قابلة للتغيير حسب توفر المواد في السوق. يبدأ العمل أو التسليم بعد تأكيد الطلب ودفع المبلغ المتفق عليه.</textarea>
+      </div>
+
+      <div class="signature">
+        <div class="signBox">توقيع الزبون</div>
+        <div class="signBox">توقيع المسؤول</div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    const KEY = "design_materials_invoice_v2";
+
+    function today(){
+      const d = new Date();
+      const m = String(d.getMonth()+1).padStart(2,"0");
+      const day = String(d.getDate()).padStart(2,"0");
+      return `${d.getFullYear()}-${m}-${day}`;
+    }
+
+    function rowTemplate(name="", category="تصميم", unit="خدمة", qty=1, price=0){
+      return `
+        <tr>
+          <td><input class="name" value="${name}" placeholder="مثال: تصميم واجهة / إسمنت / حديد" oninput="calc();save()" /></td>
+          <td>
+            <select class="category" oninput="save()">
+              <option ${category==="تصميم"?"selected":""}>تصميم</option>
+              <option ${category==="مستلزمات بناء"?"selected":""}>مستلزمات بناء</option>
+              <option ${category==="يد عاملة"?"selected":""}>يد عاملة</option>
+              <option ${category==="نقل"?"selected":""}>نقل</option>
+              <option ${category==="أخرى"?"selected":""}>أخرى</option>
+            </select>
+          </td>
+          <td><input class="unit" value="${unit}" placeholder="كيس / طن / خدمة" oninput="save()" /></td>
+          <td><input class="qty" type="number" value="${qty}" min="0" step="0.01" oninput="calc();save()" /></td>
+          <td><input class="price" type="number" value="${price}" min="0" step="0.01" oninput="calc();save()" /></td>
+          <td class="amount"><span class="lineTotal">0</span> MRU</td>
+          <td class="deleteCol no-print"><button class="deleteRow" onclick="deleteRow(this)">×</button></td>
+        </tr>
+      `;
+    }
+
+    function addRow(name="", category="تصميم", unit="خدمة", qty=1, price=0){
+      document.getElementById("items").insertAdjacentHTML("beforeend", rowTemplate(name, category, unit, qty, price));
+      calc();
+      save();
+    }
+
+    function addMaterial(){
+      addRow("مستلزم بناء", "مستلزمات بناء", "قطعة", 1, 0);
+    }
+
+    function addPreset(name, unit, qty, price){
+      addRow(name, "مستلزمات بناء", unit, qty, price);
+    }
+
+    function deleteRow(btn){
+      btn.closest("tr").remove();
+      calc();
+      save();
+    }
+
+    function calc(){
+      let subtotal = 0;
+      document.querySelectorAll("#items tr").forEach(row=>{
+        const qty = Number(row.querySelector(".qty").value) || 0;
+        const price = Number(row.querySelector(".price").value) || 0;
+        const total = qty * price;
+        row.querySelector(".lineTotal").textContent = total.toLocaleString("en-US");
+        subtotal += total;
+      });
+      const discount = Number(document.getElementById("discount").value) || 0;
+      const paid = Number(document.getElementById("paid").value) || 0;
+      const remaining = Math.max(subtotal - discount - paid, 0);
+      document.getElementById("subtotal").textContent = subtotal.toLocaleString("en-US");
+      document.getElementById("remaining").textContent = remaining.toLocaleString("en-US");
+    }
+
+    function getRows(){
+      return Array.from(document.querySelectorAll("#items tr")).map(row=>({
+        name: row.querySelector(".name").value,
+        category: row.querySelector(".category").value,
+        unit: row.querySelector(".unit").value,
+        qty: row.querySelector(".qty").value,
+        price: row.querySelector(".price").value
+      }));
+    }
+
+    function save(){
+      const ids = [
+        "companyName","companyDesc","companyPhone","invoiceNo","invoiceDate","invoiceType",
+        "customerName","customerPhone","customerAddress","projectType","duration","paymentMethod",
+        "discount","paid","notes"
+      ];
+      const data = {};
+      ids.forEach(id=>{
+        const el = document.getElementById(id);
+        if(el) data[id] = el.value;
+      });
+      data.rows = getRows();
+      localStorage.setItem(KEY, JSON.stringify(data));
+    }
+
+    function load(){
+      const saved = localStorage.getItem(KEY);
+      if(!saved){
+        invoiceDate.value = today();
+        addRow("تصميم هندسي", "تصميم", "خدمة", 1, 0);
+        addRow("إسمنت", "مستلزمات بناء", "كيس", 1, 0);
+        return;
+      }
+      const data = JSON.parse(saved);
+      Object.keys(data).forEach(k=>{
+        const el = document.getElementById(k);
+        if(el && k !== "rows") el.value = data[k];
+      });
+      document.getElementById("items").innerHTML = "";
+      (data.rows || [{name:"تصميم هندسي",category:"تصميم",unit:"خدمة",qty:1,price:0}]).forEach(r=>{
+        addRow(r.name, r.category, r.unit, r.qty, r.price);
+      });
+      calc();
+    }
+
+    function resetInvoice(){
+      if(!confirm("هل تريد مسح بيانات الفاتورة؟")) return;
+      localStorage.removeItem(KEY);
+      location.reload();
+    }
+
+    function sendWhatsApp(){
+      const phone = customerPhone.value.replace(/\D/g,"");
+      if(!phone){
+        alert("اكتب رقم واتساب الزبون أولاً");
+        return;
+      }
+      const lines = getRows().map(r=>`- ${r.name} (${r.unit}): ${r.qty} × ${r.price} MRU`).join("%0A");
+      const msg =
+`السلام عليكم ${customerName.value || ""}%0A`+
+`هذه فاتورة ${invoiceType.value}:%0A`+
+`رقم الفاتورة: ${invoiceNo.value}%0A`+
+`المشروع: ${projectType.value || "-"}%0A`+
+`${lines}%0A`+
+`المجموع: ${subtotal.textContent} MRU%0A`+
+`الباقي: ${remaining.textContent} MRU%0A`+
+`شكراً لكم.`;
+      window.open(`https://wa.me/${phone}?text=${msg}`, "_blank");
+    }
+
+    load();
+  </script>
+</body>
+</html>
