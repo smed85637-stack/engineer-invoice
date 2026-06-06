@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>فاتورة هندسية احترافية</title>
+  <style>
+    :root{
+      --main:#0f766e;
+      --dark:#0f172a;
+      --light:#f4f7f8;
+      --muted:#64748b;
+      --border:#dbe3e7;
+      --card:#ffffff;
+      --danger:#dc2626;
+      --gold:#f59e0b;
+    }
+    *{box-sizing:border-box}
+    body{
+      margin:0;
+      font-family:system-ui,-apple-system,"Segoe UI",Tahoma,Arial,sans-serif;
+      background:var(--light);
+      color:var(--dark);
+      padding:16px;
+    }
+
+    .authScreen{
+      max-width:520px;
+      margin:35px auto;
+      background:#fff;
+      border:1px solid var(--border);
+      border-radius:28px;
+      padding:24px;
+      box-shadow:0 16px 40px rgba(15,23,42,.12);
+    }
+    .authLogo{
+      width:78px;
+      height:78px;
+      margin:0 auto 14px;
+      border-radius:24px;
+      background:linear-gradient(135deg,var(--main),#164e63);
+      color:#fff;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:36px;
+      font-weight:900;
+    }
+    .authScreen h2{
+      margin:0;
+      text-align:center;
+      color:var(--main);
+      font-size:28px;
+    }
+    .authScreen p{
+      margin:10px 0 20px;
+      text-align:center;
+      color:var(--muted);
+      line-height:1.8;
+    }
+    .authTabs{
+      display:flex;
+      gap:8px;
+      margin-bottom:16px;
+      background:#f1f5f9;
+      padding:6px;
+      border-radius:16px;
+    }
+    .authTabs button{
+      flex:1;
+      background:transparent;
+      color:#0f172a;
+      border-radius:12px;
+    }
+    .authTabs button.active{
+      background:var(--main);
+      color:#fff;
+    }
+    .authError,.authSuccess{
+      display:none;
+      border-radius:14px;
+      padding:10px;
+      margin-bottom:12px;
+      font-weight:800;
+      text-align:center;
+      line-height:1.7;
+    }
+    .authError{
+      background:#fee2e2;
+      color:#991b1b;
+      border:1px solid #fecaca;
+    }
+    .authSuccess{
+      background:#dcfce7;
+      color:#166534;
+      border:1px solid #bbf7d0;
+    }
+
+    .app{max-width:1050px;margin:auto;display:none}
+    .toolbar{
+      background:#fff;
+      border:1px solid var(--border);
+      border-radius:18px;
+      padding:14px;
+      margin-bottom:16px;
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      justify-content:space-between;
+      align-items:center;
+      box-shadow:0 8px 22px rgba(15,23,42,.08);
+    }
+    .toolbar h1{margin:0;font-size:22px;color:var(--main)}
+    .btns{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+    button{
+      border:0;
+      border-radius:12px;
+      padding:11px 14px;
+      font-weight:800;
+      cursor:pointer;
+      color:#fff;
+      background:var(--main);
+      font-size:14px;
+    }
+    button.secondary{background:#0f172a}
+    button.gold{background:var(--gold)}
+    button.danger{background:var(--danger)}
+    button.light{background:#e2e8f0;color:#0f172a}
+    .topUser{
+      background:#ecfeff;
+      color:#0f766e;
+      border:1px solid #99f6e4;
+      padding:9px 12px;
+      border-radius:999px;
+      font-weight:900;
+      font-size:13px;
+    }
+
+    .invoice{
+      background:var(--card);
+      border:1px solid var(--border);
+      border-radius:24px;
+      padding:26px;
+      box-shadow:0 12px 35px rgba(15,23,42,.10);
+    }
+    .head{
+      display:flex;
+      justify-content:space-between;
+      gap:18px;
+      border-bottom:3px solid var(--main);
+      padding-bottom:18px;
+      margin-bottom:20px;
+      flex-wrap:wrap;
+    }
+    .brand h2{margin:0;font-size:30px;color:var(--main)}
+    .brand p,.meta p{margin:6px 0;color:var(--muted);line-height:1.6}
+    .invoice-title{text-align:left;min-width:260px}
+    .invoice-title h3{margin:0;font-size:34px;color:#0f172a}
+    .meta{
+      margin-top:10px;
+      background:#f8fafc;
+      border:1px solid var(--border);
+      border-radius:16px;
+      padding:12px;
+    }
+    .grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:14px;
+      margin:18px 0;
+    }
+    .box{
+      border:1px solid var(--border);
+      border-radius:18px;
+      padding:14px;
+      background:#fcfdff;
+    }
+    .box h4,.designImageBox h4{margin:0 0 10px;color:var(--main);font-size:16px}
+    label{
+      display:block;
+      font-size:13px;
+      font-weight:800;
+      color:#334155;
+      margin-bottom:4px;
+    }
+    input,textarea,select{
+      width:100%;
+      border:1px solid var(--border);
+      border-radius:12px;
+      padding:10px;
+      font-size:15px;
+      outline:none;
+      margin-bottom:10px;
+      background:white;
+    }
+    textarea{min-height:70px;resize:vertical}
+    .designImageBox{
+      border:1px solid var(--border);
+      border-radius:18px;
+      padding:14px;
+      background:#fcfdff;
+      margin:16px 0;
+    }
+    .imagePreview{
+      width:100%;
+      min-height:180px;
+      border:2px dashed var(--border);
+      border-radius:18px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+      overflow:hidden;
+      background:#f8fafc;
+      color:#64748b;
+      font-weight:800;
+    }
+    .imagePreview img{
+      max-width:100%;
+      max-height:360px;
+      object-fit:contain;
+      display:block;
+    }
+
+    .quick{
+      border:1px solid var(--border);
+      border-radius:18px;
+      padding:14px;
+      background:#f8fafc;
+      margin:10px 0 16px;
+    }
+    .quick h4{margin:0 0 10px;color:#0f172a}
+    .chips{display:flex;gap:8px;flex-wrap:wrap}
+    .chip{
+      background:#ecfeff;
+      color:#0f766e;
+      border:1px solid #99f6e4;
+      padding:9px 12px;
+      border-radius:999px;
+      font-weight:900;
+      cursor:pointer;
+      font-size:13px;
+    }
+    table{
+      width:100%;
+      border-collapse:collapse;
+      margin-top:16px;
+      overflow:hidden;
+      border-radius:16px;
+    }
+    th{
+      background:var(--main);
+      color:#fff;
+      padding:12px;
+      text-align:right;
+      font-size:14px;
+    }
+    td{
+      border-bottom:1px solid var(--border);
+      padding:8px;
+      vertical-align:top;
+    }
+    td input, td select{margin:0}
+    .amount{text-align:left;font-weight:900;white-space:nowrap}
+    .deleteRow{
+      background:#fee2e2;
+      color:#991b1b;
+      padding:9px 10px;
+      border-radius:10px;
+      font-size:13px;
+    }
+    .totals{
+      margin-top:18px;
+      display:flex;
+      justify-content:flex-end;
+    }
+    .totalBox{
+      width:360px;
+      border:1px solid var(--border);
+      border-radius:18px;
+      overflow:hidden;
+      background:#fff;
+    }
+    .row{
+      display:flex;
+      justify-content:space-between;
+      padding:12px 14px;
+      border-bottom:1px solid var(--border);
+      gap:12px;
+      align-items:center;
+    }
+    .row.final{
+      background:#ecfeff;
+      color:var(--main);
+      font-size:21px;
+      font-weight:900;
+      border-bottom:0;
+    }
+    .signature{
+      margin-top:28px;
+      display:flex;
+      justify-content:space-between;
+      gap:18px;
+      flex-wrap:wrap;
+    }
+    .signBox{
+      width:260px;
+      text-align:center;
+      padding-top:35px;
+      border-top:1px solid #94a3b8;
+      color:#475569;
+      font-weight:800;
+    }
+    .authNote{
+      font-size:12px;
+      color:#64748b;
+      line-height:1.7;
+      text-align:center;
+      margin-top:12px;
+    }
+
+    @media(max-width:780px){
+      .grid{grid-template-columns:1fr}
+      .invoice{padding:16px}
+      .invoice-title{text-align:right}
+      .invoice-title h3{font-size:28px}
+      .totalBox{width:100%}
+      table{font-size:13px}
+      th,td{padding:7px}
+    }
+    @media print{
+      body{background:#fff;padding:0}
+      .toolbar,.quick,.no-print,.authScreen{display:none!important}
+      .app{max-width:100%;margin:0;display:block!important}
+      .invoice{box-shadow:none;border:0;border-radius:0}
+      input,textarea,select{
+        border:0;
+        padding:0;
+        background:transparent;
+        font:inherit;
+        color:inherit;
+        appearance:none;
+      }
+      textarea{height:auto}
+      .deleteCol{display:none}
+    }
+  </style>
+</head>
+<body>
+
+  <div class="authScreen" id="authScreen">
+    <div class="authLogo">م</div>
+    <h2>دخول المهندس</h2>
+    <p>هذه الصفحة خاصة بالمهندس لإدارة الفواتير، التصاميم، ومستلزمات البناء.</p>
+
+    <div class="authTabs">
+      <button id="loginTab" class="active" onclick="showAuthMode('login')">تسجيل الدخول</button>
+      <button id="registerTab" onclick="showAuthMode('register')">إنشاء حساب</button>
+    </div>
+
+    <div class="authError" id="authError"></div>
+    <div class="authSuccess" id="authSuccess"></div>
+
+    <div id="registerBox" style="display:none">
+      <label>اسم المهندس</label>
+      <input id="regName" placeholder="مثال: المهندس محمد" />
+      <label>رقم الهاتف</label>
+      <input id="regPhone" placeholder="مثال: 37929637" />
+      <label>كلمة المرور</label>
+      <input id="regPass" type="password" placeholder="اكتب كلمة مرور خاصة" />
+      <button style="width:100%" onclick="registerEngineer()">حفظ حساب المهندس</button>
+    </div>
+
+    <div id="loginBox">
+      <label>رقم الهاتف</label>
+      <input id="loginPhone" placeholder="رقم هاتف المهندس" />
+      <label>كلمة المرور</label>
+      <input id="loginPass" type="password" placeholder="كلمة المرور" />
+      <button style="width:100%" onclick="loginEngineer()">دخول</button>
+    </div>
+
+    <div class="authNote">
+      ملاحظة: هذا التسجيل محفوظ على نفس الجهاز فقط. إذا فتحت الموقع من جهاز آخر، ستحتاج إنشاء الحساب من جديد.
+    </div>
+  </div>
+
+  <div class="app" id="mainApp">
+    <div class="toolbar no-print">
+      <h1>فاتورة هندسية احترافية</h1>
+      <div class="btns">
+        <span class="topUser" id="engineerNameBadge">المهندس</span>
+        <button class="light" onclick="logoutEngineer()">خروج</button>
+        <button onclick="addRow()">إضافة سطر</button>
+        <button class="gold" onclick="addMaterial()">إضافة مستلزم بناء</button>
+        <button class="secondary" onclick="sendWhatsApp()">إرسال واتساب</button>
+        <button class="light" onclick="window.print()">طباعة / PDF</button>
+        <button class="danger" onclick="resetInvoice()">مسح</button>
+      </div>
+    </div>
+
+    <section class="invoice">
+      <div class="head">
+        <div class="brand">
+          <h2><input id="companyName" value="مكتب الهندسة والتوريد للبناء" oninput="save()" /></h2>
+          <p><input id="companyDesc" value="تصاميم هندسية • خرائط معمارية • واجهات • مستلزمات بناء" oninput="save()" /></p>
+          <p>الهاتف / واتساب: <input id="companyPhone" value="37929637" oninput="save()" /></p>
+        </div>
+
+        <div class="invoice-title">
+          <h3>فاتورة رسمية</h3>
+          <div class="meta">
+            <p>رقم الفاتورة: <input id="invoiceNo" value="INV-001" oninput="save()" /></p>
+            <p>التاريخ: <input id="invoiceDate" type="date" oninput="save()" /></p>
+            <p>نوع الفاتورة:
+              <select id="invoiceType" oninput="save()">
+                <option>تصميم هندسي</option>
+                <option>مستلزمات بناء</option>
+                <option>تصميم + مستلزمات بناء</option>
+              </select>
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid">
+        <div class="box">
+          <h4>بيانات الزبون</h4>
+          <label>اسم الزبون</label>
+          <input id="customerName" placeholder="مثال: محمد أحمد" oninput="save()" />
+          <label>رقم الهاتف / واتساب</label>
+          <input id="customerPhone" placeholder="مثال: 22200000000" oninput="save()" />
+          <label>العنوان / موقع المشروع</label>
+          <input id="customerAddress" placeholder="مثال: نواكشوط - تفرغ زينة" oninput="save()" />
+        </div>
+
+        <div class="box">
+          <h4>تفاصيل المشروع</h4>
+          <label>نوع المشروع</label>
+          <input id="projectType" placeholder="مثال: بناء منزل / محل / فيلا / ترميم" oninput="save()" />
+          <label>مدة التنفيذ أو التسليم</label>
+          <input id="duration" placeholder="مثال: 7 أيام / حسب التوفر" oninput="save()" />
+          <label>طريقة الدفع</label>
+          <input id="paymentMethod" placeholder="مثال: نقداً / تحويل / دفعة أولى" oninput="save()" />
+        </div>
+      </div>
+
+      <div class="designImageBox">
+        <h4>صورة التصميم</h4>
+        <label class="no-print">اختيار صورة من الجهاز</label>
+        <input class="no-print" id="designImageInput" type="file" accept="image/*" onchange="loadDesignImage(event)" />
+        <label class="no-print">أو ضع رابط صورة</label>
+        <input class="no-print" id="designImageUrl" placeholder="رابط صورة التصميم اختياري" oninput="loadDesignImageUrl();save()" />
+        <div class="imagePreview" id="designImagePreview">لم تتم إضافة صورة التصميم بعد</div>
+        <button class="danger no-print" style="margin-top:10px" onclick="removeDesignImage()">حذف الصورة</button>
+      </div>
+
+      <div class="quick no-print">
+        <h4>إضافة سريعة لمستلزمات البناء</h4>
+        <div class="chips">
+          <span class="chip" onclick="addPreset('إسمنت', 'كيس', 1, 0)">إسمنت</span>
+          <span class="chip" onclick="addPreset('حديد بناء', 'طن', 1, 0)">حديد</span>
+          <span class="chip" onclick="addPreset('رمل', 'متر مكعب', 1, 0)">رمل</span>
+          <span class="chip" onclick="addPreset('حصى', 'متر مكعب', 1, 0)">حصى</span>
+          <span class="chip" onclick="addPreset('طوب / بلوك', 'حبة', 100, 0)">طوب / بلوك</span>
+          <span class="chip" onclick="addPreset('دهان', 'علبة', 1, 0)">دهان</span>
+          <span class="chip" onclick="addPreset('أنابيب سباكة', 'قطعة', 1, 0)">سباكة</span>
+          <span class="chip" onclick="addPreset('أسلاك كهرباء', 'لفة', 1, 0)">كهرباء</span>
+          <span class="chip" onclick="addPreset('باب / نافذة', 'قطعة', 1, 0)">باب / نافذة</span>
+        </div>
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th style="width:34%">الخدمة / المادة</th>
+            <th style="width:16%">النوع</th>
+            <th style="width:13%">الوحدة</th>
+            <th style="width:12%">الكمية</th>
+            <th style="width:15%">السعر</th>
+            <th style="width:15%">المجموع</th>
+            <th class="deleteCol no-print" style="width:5%">حذف</th>
+          </tr>
+        </thead>
+        <tbody id="items"></tbody>
+      </table>
+
+      <div class="totals">
+        <div class="totalBox">
+          <div class="row">
+            <span>المجموع الفرعي</span>
+            <strong><span id="subtotal">0</span> MRU</strong>
+          </div>
+          <div class="row">
+            <span>الخصم</span>
+            <input id="discount" type="number" value="0" oninput="calc();save()" style="width:120px;text-align:left" />
+          </div>
+          <div class="row">
+            <span>المدفوع</span>
+            <input id="paid" type="number" value="0" oninput="calc();save()" style="width:120px;text-align:left" />
+          </div>
+          <div class="row final">
+            <span>الباقي</span>
+            <span><span id="remaining">0</span> MRU</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="signature">
+        <div class="signBox">توقيع الزبون</div>
+        <div class="signBox">توقيع المسؤول</div>
+      </div>
+    </section>
+  </div>
+
+  <script>
+    const KEY = "design_materials_invoice_v3";
+    const AUTH_KEY = "engineer_private_account_v1";
+    const SESSION_KEY = "engineer_private_session_v1";
+    const IMAGE_KEY = "invoice_design_image_v1";
+
+    function showAuthMode(mode){
+      document.getElementById("authError").style.display = "none";
+      document.getElementById("authSuccess").style.display = "none";
+      const login = mode === "login";
+      document.getElementById("loginBox").style.display = login ? "block" : "none";
+      document.getElementById("registerBox").style.display = login ? "none" : "block";
+      document.getElementById("loginTab").classList.toggle("active", login);
+      document.getElementById("registerTab").classList.toggle("active", !login);
+    }
+
+    function showAuthError(msg){
+      const box = document.getElementById("authError");
+      box.textContent = msg;
+      box.style.display = "block";
+      document.getElementById("authSuccess").style.display = "none";
+    }
+
+    function showAuthSuccess(msg){
+      const box = document.getElementById("authSuccess");
+      box.textContent = msg;
+      box.style.display = "block";
+      document.getElementById("authError").style.display = "none";
+    }
+
+    function registerEngineer(){
+      const name = document.getElementById("regName").value.trim();
+      const phone = document.getElementById("regPhone").value.trim();
+      const pass = document.getElementById("regPass").value.trim();
+
+      if(!name || !phone || !pass){
+        showAuthError("اكتب اسم المهندس ورقم الهاتف وكلمة المرور");
+        return;
+      }
+      if(pass.length < 4){
+        showAuthError("كلمة المرور يجب أن تكون 4 أرقام أو حروف على الأقل");
+        return;
+      }
+
+      const account = {name, phone, pass};
+      localStorage.setItem(AUTH_KEY, JSON.stringify(account));
+      document.getElementById("loginPhone").value = phone;
+      document.getElementById("loginPass").value = "";
+      showAuthSuccess("تم حفظ حساب المهندس بنجاح. يمكنك الآن تسجيل الدخول.");
+      showAuthMode("login");
+    }
+
+    function loginEngineer(){
+      const account = JSON.parse(localStorage.getItem(AUTH_KEY) || "null");
+      const phone = document.getElementById("loginPhone").value.trim();
+      const pass = document.getElementById("loginPass").value.trim();
+
+      if(!account){
+        showAuthError("لا يوجد حساب محفوظ. اضغط إنشاء حساب أولاً.");
+        showAuthMode("register");
+        return;
+      }
+
+      if(phone === account.phone && pass === account.pass){
+        localStorage.setItem(SESSION_KEY, "active");
+        openMainApp();
+      }else{
+        showAuthError("رقم الهاتف أو كلمة المرور غير صحيحة");
+      }
+    }
+
+    function openMainApp(){
+      const account = JSON.parse(localStorage.getItem(AUTH_KEY) || "null");
+      document.getElementById("authScreen").style.display = "none";
+      document.getElementById("mainApp").style.display = "block";
+      if(account){
+        document.getElementById("engineerNameBadge").textContent = account.name;
+      }
+    }
+
+    function logoutEngineer(){
+      localStorage.removeItem(SESSION_KEY);
+      document.getElementById("mainApp").style.display = "none";
+      document.getElementById("authScreen").style.display = "block";
+      document.getElementById("loginPass").value = "";
+      showAuthMode("login");
+    }
+
+    function checkEngineerSession(){
+      const account = localStorage.getItem(AUTH_KEY);
+      const session = localStorage.getItem(SESSION_KEY);
+
+      if(account && session === "active"){
+        openMainApp();
+      }else if(!account){
+        showAuthMode("register");
+      }else{
+        showAuthMode("login");
+      }
+    }
+
+    function today(){
+      const d = new Date();
+      const m = String(d.getMonth()+1).padStart(2,"0");
+      const day = String(d.getDate()).padStart(2,"0");
+      return `${d.getFullYear()}-${m}-${day}`;
+    }
+
+    function rowTemplate(name="", category="تصميم", unit="خدمة", qty=1, price=0){
+      return `
+        <tr>
+          <td><input class="name" value="${name}" placeholder="مثال: تصميم واجهة / إسمنت / حديد" oninput="calc();save()" /></td>
+          <td>
+            <select class="category" oninput="save()">
+              <option ${category==="تصميم"?"selected":""}>تصميم</option>
+              <option ${category==="مستلزمات بناء"?"selected":""}>مستلزمات بناء</option>
+              <option ${category==="يد عاملة"?"selected":""}>يد عاملة</option>
+              <option ${category==="نقل"?"selected":""}>نقل</option>
+              <option ${category==="أخرى"?"selected":""}>أخرى</option>
+            </select>
+          </td>
+          <td><input class="unit" value="${unit}" placeholder="كيس / طن / خدمة" oninput="save()" /></td>
+          <td><input class="qty" type="number" value="${qty}" min="0" step="0.01" oninput="calc();save()" /></td>
+          <td><input class="price" type="number" value="${price}" min="0" step="0.01" oninput="calc();save()" /></td>
+          <td class="amount"><span class="lineTotal">0</span> MRU</td>
+          <td class="deleteCol no-print"><button class="deleteRow" onclick="deleteRow(this)">×</button></td>
+        </tr>
+      `;
+    }
+
+    function addRow(name="", category="تصميم", unit="خدمة", qty=1, price=0){
+      document.getElementById("items").insertAdjacentHTML("beforeend", rowTemplate(name, category, unit, qty, price));
+      calc();
+      save();
+    }
+
+    function addMaterial(){
+      addRow("مستلزم بناء", "مستلزمات بناء", "قطعة", 1, 0);
+    }
+
+    function addPreset(name, unit, qty, price){
+      addRow(name, "مستلزمات بناء", unit, qty, price);
+    }
+
+    function deleteRow(btn){
+      btn.closest("tr").remove();
+      calc();
+      save();
+    }
+
+    function calc(){
+      let subtotal = 0;
+      document.querySelectorAll("#items tr").forEach(row=>{
+        const qty = Number(row.querySelector(".qty").value) || 0;
+        const price = Number(row.querySelector(".price").value) || 0;
+        const total = qty * price;
+        row.querySelector(".lineTotal").textContent = total.toLocaleString("en-US");
+        subtotal += total;
+      });
+
+      const discount = Number(document.getElementById("discount").value) || 0;
+      const paid = Number(document.getElementById("paid").value) || 0;
+      const remaining = Math.max(subtotal - discount - paid, 0);
+      document.getElementById("subtotal").textContent = subtotal.toLocaleString("en-US");
+      document.getElementById("remaining").textContent = remaining.toLocaleString("en-US");
+    }
+
+    function getRows(){
+      return Array.from(document.querySelectorAll("#items tr")).map(row=>({
+        name: row.querySelector(".name").value,
+        category: row.querySelector(".category").value,
+        unit: row.querySelector(".unit").value,
+        qty: row.querySelector(".qty").value,
+        price: row.querySelector(".price").value
+      }));
+    }
+
+    function save(){
+      const ids = [
+        "companyName","companyDesc","companyPhone","invoiceNo","invoiceDate","invoiceType",
+        "customerName","customerPhone","customerAddress","projectType","duration","paymentMethod",
+        "discount","paid","designImageUrl"
+      ];
+      const data = {};
+      ids.forEach(id=>{
+        const el = document.getElementById(id);
+        if(el) data[id] = el.value;
+      });
+      data.rows = getRows();
+      localStorage.setItem(KEY, JSON.stringify(data));
+    }
+
+    function load(){
+      const saved = localStorage.getItem(KEY);
+      if(!saved){
+        document.getElementById("invoiceDate").value = today();
+        addRow("تصميم هندسي", "تصميم", "خدمة", 1, 0);
+        addRow("إسمنت", "مستلزمات بناء", "كيس", 1, 0);
+        return;
+      }
+
+      const data = JSON.parse(saved);
+      Object.keys(data).forEach(k=>{
+        const el = document.getElementById(k);
+        if(el && k !== "rows") el.value = data[k];
+      });
+      document.getElementById("items").innerHTML = "";
+      (data.rows || [{name:"تصميم هندسي",category:"تصميم",unit:"خدمة",qty:1,price:0}]).forEach(r=>{
+        addRow(r.name, r.category, r.unit, r.qty, r.price);
+      });
+      calc();
+    }
+
+    function loadDesignImage(event){
+      const file = event.target.files && event.target.files[0];
+      if(!file) return;
+      const reader = new FileReader();
+      reader.onload = function(e){
+        localStorage.setItem(IMAGE_KEY, e.target.result);
+        document.getElementById("designImageUrl").value = "";
+        showDesignImage(e.target.result);
+        save();
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function loadDesignImageUrl(){
+      const url = document.getElementById("designImageUrl").value.trim();
+      if(url){
+        localStorage.setItem(IMAGE_KEY, url);
+        showDesignImage(url);
+      }else{
+        localStorage.removeItem(IMAGE_KEY);
+        showDesignImage("");
+      }
+    }
+
+    function showDesignImage(src){
+      const box = document.getElementById("designImagePreview");
+      if(!box) return;
+      if(src){
+        box.innerHTML = `<img src="${src}" alt="صورة التصميم">`;
+      }else{
+        box.textContent = "لم تتم إضافة صورة التصميم بعد";
+      }
+    }
+
+    function loadSavedDesignImage(){
+      const src = localStorage.getItem(IMAGE_KEY) || "";
+      showDesignImage(src);
+      const urlInput = document.getElementById("designImageUrl");
+      if(urlInput && src && !src.startsWith("data:")) urlInput.value = src;
+    }
+
+    function removeDesignImage(){
+      localStorage.removeItem(IMAGE_KEY);
+      document.getElementById("designImageUrl").value = "";
+      showDesignImage("");
+      save();
+    }
+
+    function resetInvoice(){
+      if(!confirm("هل تريد مسح بيانات الفاتورة؟")) return;
+      localStorage.removeItem(KEY);
+      localStorage.removeItem(IMAGE_KEY);
+      location.reload();
+    }
+
+    function sendWhatsApp(){
+      const phone = document.getElementById("customerPhone").value.replace(/\D/g,"");
+      if(!phone){
+        alert("اكتب رقم واتساب الزبون أولاً");
+        return;
+      }
+
+      const lines = getRows().map(r=>`- ${r.name} (${r.unit}): ${r.qty} × ${r.price} MRU`).join("%0A");
+      const msg =
+`السلام عليكم ${document.getElementById("customerName").value || ""}%0A`+
+`هذه فاتورة ${document.getElementById("invoiceType").value}:%0A`+
+`رقم الفاتورة: ${document.getElementById("invoiceNo").value}%0A`+
+`المشروع: ${document.getElementById("projectType").value || "-"}%0A`+
+`${lines}%0A`+
+`المجموع: ${document.getElementById("subtotal").textContent} MRU%0A`+
+`الباقي: ${document.getElementById("remaining").textContent} MRU%0A`+
+`شكراً لكم.`;
+
+      window.open(`https://wa.me/${phone}?text=${msg}`, "_blank");
+    }
+
+    load();
+    loadSavedDesignImage();
+    checkEngineerSession();
+  </script>
+</body>
+</html>
