@@ -212,6 +212,40 @@
       color:#475569;
       font-weight:800;
     }
+
+    .designImageBox{
+      border:1px solid var(--border);
+      border-radius:18px;
+      padding:14px;
+      background:#fcfdff;
+      margin:16px 0;
+    }
+    .designImageBox h4{
+      margin:0 0 10px;
+      color:var(--main);
+      font-size:16px;
+    }
+    .imagePreview{
+      width:100%;
+      min-height:180px;
+      border:2px dashed var(--border);
+      border-radius:18px;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+      overflow:hidden;
+      background:#f8fafc;
+      color:#64748b;
+      font-weight:800;
+    }
+    .imagePreview img{
+      max-width:100%;
+      max-height:360px;
+      object-fit:contain;
+      display:block;
+    }
+
     @media(max-width:780px){
       .grid{grid-template-columns:1fr}
       .invoice{padding:16px}
@@ -296,6 +330,17 @@
           <label>طريقة الدفع</label>
           <input id="paymentMethod" placeholder="مثال: نقداً / تحويل / دفعة أولى" oninput="save()" />
         </div>
+      </div>
+
+
+      <div class="designImageBox">
+        <h4>صورة التصميم</h4>
+        <label class="no-print">اختيار صورة من الجهاز</label>
+        <input class="no-print" id="designImageInput" type="file" accept="image/*" onchange="loadDesignImage(event)" />
+        <label class="no-print">أو ضع رابط صورة</label>
+        <input class="no-print" id="designImageUrl" placeholder="رابط صورة التصميم اختياري" oninput="loadDesignImageUrl();save()" />
+        <div class="imagePreview" id="designImagePreview">لم تتم إضافة صورة التصميم بعد</div>
+        <button class="danger no-print" style="margin-top:10px" onclick="removeDesignImage()">حذف الصورة</button>
       </div>
 
       <div class="quick no-print">
@@ -438,7 +483,7 @@
       const ids = [
         "companyName","companyDesc","companyPhone","invoiceNo","invoiceDate","invoiceType",
         "customerName","customerPhone","customerAddress","projectType","duration","paymentMethod",
-        "discount","paid"
+        "discount","paid","designImageUrl"
       ];
       const data = {};
       ids.forEach(id=>{
@@ -469,9 +514,61 @@
       calc();
     }
 
+
+    function loadDesignImage(event){
+      const file = event.target.files && event.target.files[0];
+      if(!file) return;
+      const reader = new FileReader();
+      reader.onload = function(e){
+        localStorage.setItem("invoice_design_image", e.target.result);
+        document.getElementById("designImageUrl").value = "";
+        showDesignImage(e.target.result);
+        save();
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function loadDesignImageUrl(){
+      const url = document.getElementById("designImageUrl").value.trim();
+      if(url){
+        localStorage.setItem("invoice_design_image", url);
+        showDesignImage(url);
+      }else{
+        localStorage.removeItem("invoice_design_image");
+        showDesignImage("");
+      }
+    }
+
+    function showDesignImage(src){
+      const box = document.getElementById("designImagePreview");
+      if(!box) return;
+      if(src){
+        box.innerHTML = `<img src="${src}" alt="صورة التصميم">`;
+      }else{
+        box.textContent = "لم تتم إضافة صورة التصميم بعد";
+      }
+    }
+
+    function loadSavedDesignImage(){
+      const src = localStorage.getItem("invoice_design_image") || "";
+      showDesignImage(src);
+      const urlInput = document.getElementById("designImageUrl");
+      if(urlInput && src && !src.startsWith("data:")) urlInput.value = src;
+    }
+
+    function removeDesignImage(){
+      localStorage.removeItem("invoice_design_image");
+      const urlInput = document.getElementById("designImageUrl");
+      if(urlInput) urlInput.value = "";
+      showDesignImage("");
+      save();
+    }
+
+
     function resetInvoice(){
       if(!confirm("هل تريد مسح بيانات الفاتورة؟")) return;
       localStorage.removeItem(KEY);
+      localStorage.removeItem("invoice_design_image");
       location.reload();
     }
 
@@ -495,6 +592,7 @@
     }
 
     load();
+    loadSavedDesignImage();
   </script>
 </body>
 </html>
