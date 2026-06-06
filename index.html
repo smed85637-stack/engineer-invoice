@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>فاتورة تصميم ومستلزمات بناء</title>
+  <title>فاتورة هندسية احترافية</title>
   <style>
     :root{
       --main:#0f766e;
@@ -242,7 +242,7 @@
 <body>
   <div class="app">
     <div class="toolbar no-print">
-      <h1>فاتورة تصميم ومستلزمات بناء</h1>
+      <h1>فاتورة هندسية احترافية</h1>
       <div class="btns">
         <button onclick="addRow()">إضافة سطر</button>
         <button class="gold" onclick="addMaterial()">إضافة مستلزم بناء</button>
@@ -255,13 +255,13 @@
     <section class="invoice">
       <div class="head">
         <div class="brand">
-          <h2><input id="companyName" value="مكتب المهندس للتصاميم ومستلزمات البناء" oninput="save()" /></h2>
-          <p><input id="companyDesc" value="تصاميم هندسية • خرائط • واجهات • مستلزمات بناء" oninput="save()" /></p>
+          <h2><input id="companyName" value="مكتب الهندسة والتوريد للبناء" oninput="save()" /></h2>
+          <p><input id="companyDesc" value="تصاميم هندسية • خرائط معمارية • واجهات • مستلزمات بناء" oninput="save()" /></p>
           <p>الهاتف / واتساب: <input id="companyPhone" value="22200000000" oninput="save()" /></p>
         </div>
 
         <div class="invoice-title">
-          <h3>فاتورة</h3>
+          <h3>فاتورة رسمية</h3>
           <div class="meta">
             <p>رقم الفاتورة: <input id="invoiceNo" value="INV-001" oninput="save()" /></p>
             <p>التاريخ: <input id="invoiceDate" type="date" oninput="save()" /></p>
@@ -347,11 +347,6 @@
             <span><span id="remaining">0</span> MRU</span>
           </div>
         </div>
-      </div>
-
-      <div class="notes">
-        <strong>ملاحظات:</strong>
-        <textarea id="notes" oninput="save()">هذه الفاتورة خاصة بخدمات التصميم ومستلزمات البناء. الأسعار قابلة للتغيير حسب توفر المواد في السوق. يبدأ العمل أو التسليم بعد تأكيد الطلب ودفع المبلغ المتفق عليه.</textarea>
       </div>
 
       <div class="signature">
@@ -443,7 +438,7 @@
       const ids = [
         "companyName","companyDesc","companyPhone","invoiceNo","invoiceDate","invoiceType",
         "customerName","customerPhone","customerAddress","projectType","duration","paymentMethod",
-        "discount","paid","notes"
+        "discount","paid"
       ];
       const data = {};
       ids.forEach(id=>{
